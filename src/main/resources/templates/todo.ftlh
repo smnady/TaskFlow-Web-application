@@ -397,6 +397,7 @@
                     </select><br>
                     <label class="form-label" for="description">Описание:</label><br>
                     <textarea class="form-input" id="description" name="description"></textarea><br>
+                    <button class="form-button" type="button" onclick="generateDescription()">Сгенерировать описание</button>
                     <button class="form-button" type="submit">Добавить задачу</button>
                 </form>
         </div>
@@ -427,6 +428,33 @@
 </div>
 
 <script>
+
+    function generateDescription() {
+        const taskName = document.getElementById('taskName').value;
+
+        const requestBody = JSON.stringify({
+            taskName: taskName,
+        });
+
+        fetch('/generateDescription', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: requestBody
+        })
+            .then(response => response.json())
+            .then(data => {
+                const description = data.description;
+                document.getElementById('description').value = description;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        // Предотвращаем отправку формы
+        return false;
+    }
 
     function logOut() {
         fetch('/logOut', {

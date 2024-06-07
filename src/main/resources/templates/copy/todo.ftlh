@@ -162,7 +162,7 @@
     </div>
     <!-- Вертикальный блок.
      Содержание: кнопка добавления задачи,
-     функционал для фильтрации задачю
+     функционал для фильтрации задач
      -->
     <div class="block">
         <#assign hasProjects = projectList?has_content && projectList.getProjects()?has_content>

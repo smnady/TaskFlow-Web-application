@@ -1,16 +1,22 @@
 package org.taskflow.TaskFlow.controllers;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.taskflow.TaskFlow.models.Task;
 import org.taskflow.TaskFlow.services.TaskService;
+import org.taskflow.TaskFlow.utils.Gpt;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.String.format;
 
@@ -49,6 +55,19 @@ public class TaskController {
             return "redirect:";
         taskService.updateTask(task);
         return "redirect:/listOfProjects";
+    }
+
+    @PostMapping("/generateDescription")
+    public ResponseEntity<Map<String, String>> generateDescription(
+            @RequestBody Map<String, String> requestBody) throws UnirestException {
+        String taskName = requestBody.get("taskName");
+
+        String description = Gpt.generateDescription(taskName);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("description", description);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/closeTask")
